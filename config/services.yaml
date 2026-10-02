@@ -7,6 +7,17 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    job_api_url: '%env(JOB_API_URL)%'
+    job_applicant:
+        first_name: '%env(JOB_APPLICANT_FIRST_NAME)%'
+        last_name: '%env(JOB_APPLICANT_LAST_NAME)%'
+        email: '%env(JOB_APPLICANT_EMAIL)%'
+        telephone: '%env(JOB_APPLICANT_TELEPHONE)%'
+        motivation: '%env(JOB_APPLICANT_MOTIVATION)%'
+        cv: '%env(JOB_APPLICANT_CV)%'
+        cv_extension: '%env(JOB_APPLICANT_CV_EXTENSION)%'
+        linkedin_url: '%env(JOB_APPLICANT_LINKEDIN)%'
+        github_url: '%env(JOB_APPLICANT_GITHUB)%'
 
 services:
     # default configuration for services in *this* file
@@ -18,6 +29,14 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
+        exclude:
+            # Plain data holders, instantiated directly (not services).
+            - '../src/DTO/'
+
+    App\Service\JobApplicationService:
+        arguments:
+            $jobApiUrl: '%job_api_url%'
+            $jobApplicant: '%job_applicant%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
